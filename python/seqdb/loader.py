@@ -134,7 +134,8 @@ or a comma-separated list of identifiers (P12345,P98765)
 
 def main():
     args = initArgs()
-
+    logger.setLevel(logging.getLevelName(args.SEQDB_LOADER_LOGLEVEL))
+    
     parser          = args.SEQDB_LOADER_PARSER
     inputfile       = args.FILE
     connectargs     = {
