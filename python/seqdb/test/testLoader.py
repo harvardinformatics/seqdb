@@ -30,7 +30,7 @@ for k,v in connectargs.iteritems():
         raise Exception('Connection argument %s is required.' % k)
 
 
-loaderscript = os.path.join(os.path.dirname(os.path.dirname(__file__)),'seqdb-loader.py')
+loaderscript = os.path.join(os.path.dirname(os.path.dirname(__file__)),'loader.py')
 testdatafile = os.path.join(os.path.dirname(__file__),'uniprot-test.xml')
 
 

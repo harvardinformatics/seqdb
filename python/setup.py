@@ -28,7 +28,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'seqdb-loader = seqdb.seqdb-loader:main'
+            'seqdb-loader = seqdb.loader:main'
         ]
     },
     install_requires=[
