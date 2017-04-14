@@ -14,7 +14,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="seqdb",
-    version="0.4.0",
+    version="0.5.0",
     author='Aaron Kitzmiller <aaron_kitzmiller@harvard.edu>',
     author_email='aaron_kitzmiller@harvard.edu',
     description='A BioSQL sequence database loader',

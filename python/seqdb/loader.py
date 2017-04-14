@@ -30,6 +30,7 @@ COMMIT_COUNT = 100
 # If the error count goes above this number, processing stops
 ERROR_COUNT = 100
 
+logging.basicConfig(format='%(asctime)s: %(message)s',level=logging.ERROR)
 logger = logging.getLogger()
 
 
@@ -109,7 +110,7 @@ or a comma-separated list of identifiers (P12345,P98765)
             
     # Setup argument parser
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter)
-    parser.add_argument('-V', '--version', action='version', version='0.4.0')
+    parser.add_argument('-V', '--version', action='version', version='0.5.0')
     parser.add_argument('FILE',help='Sequence data file')
     
     # Use the parameterdefs for the ArgumentParser
@@ -135,6 +136,7 @@ or a comma-separated list of identifiers (P12345,P98765)
 def main():
     args = initArgs()
     logger.setLevel(logging.getLevelName(args.SEQDB_LOADER_LOGLEVEL))
+    logger.debug('Running in DEBUG')
 
     parser          = args.SEQDB_LOADER_PARSER
     inputfile       = args.FILE
@@ -155,11 +157,15 @@ def main():
             samplesize, sampletotal = sample.split(':')
             samplesize = int(samplesize)
             sampletotal = int(sampletotal)
+            logger.debug('Taking %d samples over %d total records.' % (samplesize,sampletotal))
         else:
             sampleids = sample.split(',')
+            logger.debug('Selecting ids %s' % ' '.join(sampleids))
     
     # Connect to server; create BioSQL database if necessary
     db = connect(**connectargs)
+    logger.debug('Connected to BioSQL database.')
+
     loader = Loader.DatabaseLoader(db.adaptor, db.dbid, False)
 
     recordcount = 0
@@ -189,7 +195,7 @@ def main():
 
             if recordcount % COMMIT_COUNT == 0:
                 db.adaptor.commit()
-                logger.info('%d records loaded.' % recordcount)
+                logger.info('%d records committed.' % recordcount)
 
             if len(errors) == ERROR_COUNT:
                 db.adaptor.commit()  # Commit anything that is pending
