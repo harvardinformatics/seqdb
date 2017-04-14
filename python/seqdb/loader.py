@@ -196,6 +196,10 @@ def main():
 
             loadedcount += 1
 
+            if samplesize is not None and loadedcount == samplesize:
+                db.adaptor.commit()
+                break
+
     db.adaptor.commit()
 
     print '\n%d records loaded out of %d.\n' % (recordcount,loadedcount)

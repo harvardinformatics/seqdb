@@ -22,6 +22,11 @@ def connect(**kwargs):
         del kwargs['namespace']
 
     server = BioSeqDatabase.open_database(**kwargs)
+    create = kwargs.get('create')
+    if create and ns not in server:
+        server.new_database(ns)
+        server.commit()
+
     db = server[ns]
 
     return db
