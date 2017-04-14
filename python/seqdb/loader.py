@@ -109,7 +109,7 @@ or a comma-separated list of identifiers (P12345,P98765)
             
     # Setup argument parser
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter)
-    parser.add_argument('-V', '--version', action='version', version='1.0')
+    parser.add_argument('-V', '--version', action='version', version='0.4.0')
     parser.add_argument('FILE',help='Sequence data file')
     
     # Use the parameterdefs for the ArgumentParser
@@ -135,7 +135,7 @@ or a comma-separated list of identifiers (P12345,P98765)
 def main():
     args = initArgs()
     logger.setLevel(logging.getLevelName(args.SEQDB_LOADER_LOGLEVEL))
-    
+
     parser          = args.SEQDB_LOADER_PARSER
     inputfile       = args.FILE
     connectargs     = {
