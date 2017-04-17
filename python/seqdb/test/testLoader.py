@@ -32,6 +32,7 @@ for k,v in connectargs.iteritems():
 
 loaderscript = os.path.join(os.path.dirname(os.path.dirname(__file__)),'loader.py')
 testdatafile = os.path.join(os.path.dirname(__file__),'uniprot-test.xml')
+testsampledatafile = os.path.join(os.path.dirname(__file__),'uniprot-sample.xml')
 
 
 def runCmd(cmd):
@@ -203,3 +204,24 @@ class Test(unittest.TestCase):
             self.assertTrue(False,'For some reason P12346 got loaded.')
         except Exception as e:
             self.assertTrue("Cannot find accession 'P12346'" in str(e), 'Incorrect exception string %s' % str(e))
+
+    def testSampleSize(self):
+        '''
+        Test the <samplesize>:<total> version of sampling
+        '''
+        args = [
+            loaderscript,
+            '-p', 'uniprot-xml',
+            '--user', connectargs['user'],
+            '--password', connectargs['passwd'],
+            '--host', connectargs['host'],
+            '--database', connectargs['db'],
+            '--namespace', connectargs['namespace'],
+            '--driver', connectargs['driver'],
+            '--sample', '3:30',
+            testsampledatafile,
+        ]
+        cmdstr = ' '.join(args)
+        returncode,stdout,stderr = runCmd(cmdstr)
+        self.assertTrue(returncode == 0,'Command %s failed:\n%s' % (cmdstr,stderr))
+        self.assertTrue('3 records loaded out of' in stdout, 'Incorrect output message %s\n%s' % (stdout,stderr))
