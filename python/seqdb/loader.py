@@ -188,7 +188,7 @@ def main():
                     (samplesize is not None and recordcount == nextsample):
                 try:
                     loader.load_seqrecord(record)
-                    recordcount += 1
+                    loadedcount += 1
                 except Exception as e:
                     errors.append(str(e))
 
@@ -196,7 +196,7 @@ def main():
                 nextsample += random.randint(0,int(sampletotal / samplesize))
                 logger.debug('Sample %s selected' % str(record.id))
 
-            if recordcount > 0 and recordcount % COMMIT_COUNT == 0:
+            if loadedcount > 0 and loadedcount % COMMIT_COUNT == 0:
                 db.adaptor.commit()
                 logger.info('%d records committed.' % recordcount)
 
@@ -204,7 +204,7 @@ def main():
                 db.adaptor.commit()  # Commit anything that is pending
                 raise Exception('Processing aborted due to too many (%d) sequence errors:\n%s' % (ERROR_COUNT, '\n'.join(errors)))
 
-            loadedcount += 1
+            recordcount += 1
 
             if samplesize is not None and loadedcount == samplesize:
                 db.adaptor.commit()
