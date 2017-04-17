@@ -12,7 +12,7 @@ Created on  2017-04-12 16:32:46
 @license: GPL v2.0
 '''
 
-import sys, os, re
+import sys, os, re, traceback
 import logging
 import random
 
@@ -20,9 +20,11 @@ from Bio import SeqIO
 from BioSQL import Loader
 
 from seqdb import connect
+from seqdb import __version__ as version
 
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
+
 
 # Do a commit after COMMIT_COUNT records
 COMMIT_COUNT = 100 
@@ -118,7 +120,7 @@ or a comma-separated list of identifiers (P12345,P98765)
             
     # Setup argument parser
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter)
-    parser.add_argument('-V', '--version', action='version', version='0.5.6')
+    parser.add_argument('-V', '--version', action='version', version=version)
     parser.add_argument('FILE',help='Sequence data file')
     
     # Use the parameterdefs for the ArgumentParser
@@ -201,6 +203,7 @@ def main():
                 except Exception as e:
                     if 'Duplicate entry' not in str(e) or not ignoredups:
                         errors.append(str(e))
+                    logger.debug('Error loading %s: %s\n%s' % (record.id, str(e), traceback.format_exc()))
 
             if samplesize is not None and recordcount == nextsample:
                 nextsample += random.randint(0,int((sampletotal * 1.4) / samplesize))
