@@ -110,7 +110,7 @@ or a comma-separated list of identifiers (P12345,P98765)
             
     # Setup argument parser
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter)
-    parser.add_argument('-V', '--version', action='version', version='0.5.0')
+    parser.add_argument('-V', '--version', action='version', version='0.5.1')
     parser.add_argument('FILE',help='Sequence data file')
     
     # Use the parameterdefs for the ArgumentParser
@@ -173,6 +173,7 @@ def main():
 
     if samplesize is not None:
         nextsample = random.randint(0,int(sampletotal / samplesize))
+        logger.debug('Next sample is %d' % nextsample)
 
     # Go through the file records
     errors = []
@@ -180,6 +181,8 @@ def main():
 
         for record in SeqIO.parse(f,parser):
             logger.debug('Record %s parsed.' % str(record.id))
+            if sample is not None:
+                logger.debug('Next sample will be collected at %d' % nextsample)
             if not sample or \
                 (sampleids is not None and record.id in sampleids) or \
                     (samplesize is not None and recordcount == nextsample):
@@ -193,7 +196,7 @@ def main():
                 nextsample += random.randint(0,int(sampletotal / samplesize))
                 logger.debug('Sample %s selected' % str(record.id))
 
-            if recordcount % COMMIT_COUNT == 0:
+            if recordcount > 0 and recordcount % COMMIT_COUNT == 0:
                 db.adaptor.commit()
                 logger.info('%d records committed.' % recordcount)
 
