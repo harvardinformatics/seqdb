@@ -110,7 +110,7 @@ or a comma-separated list of identifiers (P12345,P98765)
             
     # Setup argument parser
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter)
-    parser.add_argument('-V', '--version', action='version', version='0.5.2')
+    parser.add_argument('-V', '--version', action='version', version='0.5.3')
     parser.add_argument('FILE',help='Sequence data file')
     
     # Use the parameterdefs for the ArgumentParser
@@ -212,7 +212,7 @@ def main():
 
     db.adaptor.commit()
 
-    print '\n%d records loaded out of %d.\n' % (recordcount,loadedcount)
+    print '\n%d records loaded out of %d.\n' % (loadedcount,recordcount)
     if len(errors) > 0:
         print 'Errors:\n    %s' % '\n    '.join(errors)
 
