@@ -94,6 +94,14 @@ or a comma-separated list of identifiers (P12345,P98765)
             'default'   : 'db',
         },
         {
+            'name'      : 'SEQDB_LOADER_IGNORE_DUPLICATES',
+            'switches'  : ['--ignore-duplicates'],
+            'required'  : False,
+            'help'      : 'Ignore errors due to duplicate entries.',
+            'default'   : False,
+            'action'    : 'store_true',
+        },
+        {
             'name'      : 'SEQDB_LOADER_DRIVER',
             'switches'  : ['--driver'],
             'required'  : False,
@@ -110,7 +118,7 @@ or a comma-separated list of identifiers (P12345,P98765)
             
     # Setup argument parser
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter)
-    parser.add_argument('-V', '--version', action='version', version='0.5.5')
+    parser.add_argument('-V', '--version', action='version', version='0.5.6')
     parser.add_argument('FILE',help='Sequence data file')
     
     # Use the parameterdefs for the ArgumentParser
@@ -149,6 +157,7 @@ def main():
         'namespace' : args.SEQDB_LOADER_NS,
     }
     sample          = args.SEQDB_LOADER_SAMPLE
+    ignoredups      = args.SEQDB_LOADER_IGNORE_DUPLICATES
 
     # Setup sample if specified
     sampleids = samplesize = sampletotal = None
@@ -190,7 +199,8 @@ def main():
                     loader.load_seqrecord(record)
                     loadedcount += 1
                 except Exception as e:
-                    errors.append(str(e))
+                    if 'Duplicate entry' not in str(e) or not ignoredups:
+                        errors.append(str(e))
 
             if samplesize is not None and recordcount == nextsample:
                 nextsample += random.randint(0,int((sampletotal * 1.4) / samplesize))

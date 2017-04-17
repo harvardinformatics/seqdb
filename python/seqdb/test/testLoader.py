@@ -148,7 +148,7 @@ class Test(unittest.TestCase):
 
     def testDuplicateLoad(self):
         '''
-        Load the test file successfully, try a second time
+        Load the test file successfully, try a second time.  Then try with --ignore-duplicates
         '''
         args = [
             loaderscript,
@@ -171,6 +171,13 @@ class Test(unittest.TestCase):
         self.assertTrue('0 records loaded out of 2' in stdout, 'Incorrect output message %s\n%s' % (stdout,stderr))
         self.assertTrue('(1062, "Duplicate entry \'P12345' in stdout, 'Incorrect output message %s\n%s' % (stdout,stderr))
         self.assertTrue('(1062, "Duplicate entry \'P12346' in stdout, 'Incorrect output message %s\n%s' % (stdout,stderr))
+
+        args.append('--ignore-duplicates')
+        cmdstr = ' '.join(args)
+        returncode,stdout,stderr = runCmd(cmdstr)
+        self.assertTrue(returncode == 0,'Command %s failed:\n%s' % (cmdstr,stderr))
+        self.assertTrue('0 records loaded out of 2' in stdout, 'Incorrect output message %s\n%s' % (stdout,stderr))
+        self.assertTrue('(1062, "Duplicate entry ' not in stdout, 'Incorrect output message %s\n%s' % (stdout,stderr))
 
     def testSampleById(self):
         '''
