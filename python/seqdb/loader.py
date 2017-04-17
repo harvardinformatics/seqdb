@@ -172,7 +172,7 @@ def main():
     loadedcount = 0
 
     if samplesize is not None:
-        nextsample = random.randint(0,int(sampletotal / samplesize))
+        nextsample = random.randint(0,int((sampletotal * 2) / samplesize))
         logger.debug('Next sample is %d' % nextsample)
 
     # Go through the file records
@@ -193,7 +193,7 @@ def main():
                     errors.append(str(e))
 
             if samplesize is not None and recordcount == nextsample:
-                nextsample += random.randint(0,int(sampletotal / samplesize))
+                nextsample += random.randint(0,int((sampletotal * 2) / samplesize))
                 logger.debug('Sample %s selected' % str(record.id))
 
             if loadedcount > 0 and loadedcount % COMMIT_COUNT == 0:
