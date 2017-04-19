@@ -12,4 +12,4 @@ Created on  2017-04-12 16:13:58
 
 from seqdb.connect import connect
 
-__version__ = '0.5.8'
+__version__ = '0.5.9'

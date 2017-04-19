@@ -211,7 +211,7 @@ def main():
 
             if loadedcount > 0 and loadedcount % COMMIT_COUNT == 0:
                 db.adaptor.commit()
-                logger.info('%d records committed.' % recordcount)
+                logger.info('%d records committed.' % loadedcount)
 
             if len(errors) == ERROR_COUNT:
                 db.adaptor.commit()  # Commit anything that is pending
